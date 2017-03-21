@@ -4,6 +4,7 @@ class Oystercard
 
   MAXIMUM_BALANCE = 90
   MINIMUM_BALANCE = 1
+  MINIMUM_CHARGE  = 1
 
   def initialize
     @balance = 0
@@ -13,10 +14,6 @@ class Oystercard
   def top_up(amount)
     raise "Cannot top up: maximum balance exceeded (£#{MAXIMUM_BALANCE})" if balance + amount > MAXIMUM_BALANCE
     self.balance += amount
-  end
-
-  def deduct(fare)
-    self.balance -= fare
   end
 
   def in_journey?
@@ -31,10 +28,15 @@ class Oystercard
 
   def touch_out
     self.in_use = false
+    deduct(MINIMUM_CHARGE)
   end
 
   private
 
   attr_writer :balance, :in_use
+
+  def deduct(fare)
+    self.balance -= fare
+  end
 
 end

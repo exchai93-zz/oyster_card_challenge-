@@ -29,7 +29,7 @@ describe "User Stories" do
   # I need my fare deducted from my card
   it "In order to pay for journeys, deduct fare from card" do
     card.top_up(20)
-    expect { card.deduct 3 }.to change { card.balance }.by -3
+    expect { card.touch_out }.to change { card.balance }.by -1
   end
 
   # In order to get through the barriers.
@@ -43,10 +43,19 @@ describe "User Stories" do
     expect(card.in_journey?).to be false
   end
 
-# In order to pay for my journey
-# As a customer
-# I need to have the minimum amount for a single journey
+  # In order to pay for my journey
+  # As a customer
+  # I need to have the minimum amount for a single journey
   it "In order to pay for journey, minimum amount for a single journey is needed" do
     expect{ card.touch_in }.to raise_error "Cannot pass. Insufficient funds!"
+  end
+
+  # In order to pay for my journey
+  # As a customer
+  # I need to pay for my journey when it's complete
+  it "Pay for journey when complete" do
+    card.top_up(1)
+    card.touch_in
+    expect {card.touch_out}.to change{card.balance}.by -1
   end
 end

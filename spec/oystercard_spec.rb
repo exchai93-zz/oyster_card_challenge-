@@ -31,12 +31,11 @@ describe Oystercard do
   end
 
   describe "#deduct" do
-    it { is_expected.to respond_to(:deduct).with(1).argument }
 
     it "deducts fare from balance" do
       card.top_up(30)
-      card.deduct(20)
-      expect(card.balance).to eq 10
+      card.touch_out
+      expect(card.balance).to eq 29
     end
   end
 
@@ -70,6 +69,12 @@ describe Oystercard do
       card.touch_in
       card.touch_out
       expect(card).not_to be_in_journey
+    end
+
+    it "deducts fare once journey is completed" do
+      card.top_up(described_class::MINIMUM_BALANCE)
+      card.touch_in
+      expect {card.touch_out}.to change{card.balance}.by(-described_class::MINIMUM_CHARGE)
     end
   end
 
