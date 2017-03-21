@@ -31,4 +31,15 @@ describe "User Stories" do
     card.top_up(20)
     expect { card.deduct 3 }.to change { card.balance }.by -3
   end
+
+  # In order to get through the barriers.
+  # As a customer
+  # I need to touch in and out.
+  it "In order to get through barriers, card is able to touch in and out" do
+    card.touch_in
+    expect(card.in_journey?).to be true
+    card.touch_out
+    expect(card.in_journey?).to be false
+  end
+
 end
