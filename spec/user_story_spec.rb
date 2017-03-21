@@ -37,7 +37,7 @@ describe "User Stories" do
   # I need to touch in and out.
   it "In order to get through barriers, card is able to touch in and out" do
     card.top_up(1)
-    card.touch_in
+    card.touch_in("High Barnet")
     expect(card.in_journey?).to be true
     card.touch_out
     expect(card.in_journey?).to be false
@@ -47,7 +47,7 @@ describe "User Stories" do
   # As a customer
   # I need to have the minimum amount for a single journey
   it "In order to pay for journey, minimum amount for a single journey is needed" do
-    expect{ card.touch_in }.to raise_error "Cannot pass. Insufficient funds!"
+    expect{ card.touch_in("High Barnet") }.to raise_error "Cannot pass. Insufficient funds!"
   end
 
   # In order to pay for my journey
@@ -55,7 +55,16 @@ describe "User Stories" do
   # I need to pay for my journey when it's complete
   it "Pay for journey when complete" do
     card.top_up(1)
-    card.touch_in
+    card.touch_in("High Barnet")
     expect {card.touch_out}.to change{card.balance}.by -1
+  end
+
+  # In order to pay for my journey
+  # As a customer
+  # I need to know where I've travelled from
+  it "In order to pay for journey, able to know entry station" do
+    card.top_up(1)
+    card.touch_in("High Barnet")
+    expect( card.entry_station ).to eq "High Barnet"
   end
 end
