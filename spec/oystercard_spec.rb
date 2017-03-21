@@ -46,6 +46,7 @@ describe Oystercard do
     end
 
     it 'is in journey' do
+      card.top_up(described_class::MINIMUM_BALANCE)
       card.touch_in
       expect(card.in_journey?).to be true
     end
@@ -53,17 +54,25 @@ describe Oystercard do
 
   describe "#touch_in" do
     it "can touch in" do
+      card.top_up(described_class::MINIMUM_BALANCE)
       card.touch_in
       expect(card).to be_in_journey
+    end
+
+    it "raises an error if there are insufficient funds" do
+      expect{ card.touch_in }.to raise_error "Cannot pass. Insufficient funds!"
     end
   end
 
   describe "#touch_out" do
     it "can touch out" do
+      card.top_up(described_class::MINIMUM_BALANCE)
       card.touch_in
       card.touch_out
       expect(card).not_to be_in_journey
     end
   end
+
+
 
 end
