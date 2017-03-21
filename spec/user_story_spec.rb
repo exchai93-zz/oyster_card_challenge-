@@ -24,4 +24,11 @@ describe "User Stories" do
     expect {card.top_up(46)}.to raise_error "Cannot top up: maximum balance exceeded (£90)"
   end
 
+  # In order to pay for my journey
+  # As a customer
+  # I need my fare deducted from my card
+  it "In order to pay for journeys, deduct fare from card" do
+    card.top_up(20)
+    expect { card.deduct 3 }.to change { card.balance }.by -3
+  end
 end

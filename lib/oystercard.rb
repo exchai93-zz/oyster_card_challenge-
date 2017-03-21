@@ -9,17 +9,16 @@ class Oystercard
   end
 
   def top_up(amount)
-    new_balance = balance + amount
-    raise "Cannot top up: maximum balance exceeded (£#{MAXIMUM_BALANCE})" if new_balance > MAXIMUM_BALANCE
+    raise "Cannot top up: maximum balance exceeded (£#{MAXIMUM_BALANCE})" if balance + amount > MAXIMUM_BALANCE
     self.balance += amount
+  end
+
+  def deduct(fare)
+    self.balance -= fare
   end
 
   private
 
   attr_writer :balance
-
-  # def balance_exceeded?
-  #   balance + amount
-  # end
 
 end
