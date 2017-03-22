@@ -1,7 +1,8 @@
 require_relative 'station'
+require_relative 'journey'
 class Oystercard
 
-  attr_reader :balance, :current_station, :journeys
+  attr_reader :balance, :current_station, :journeys, :journey
 
   MAXIMUM_BALANCE = 90
   MINIMUM_BALANCE = 1
@@ -24,6 +25,7 @@ class Oystercard
 
   def touch_in(station)
     raise "Cannot pass. Insufficient funds!" if balance < MINIMUM_BALANCE
+    @journey = Journey.new(station)
     self.current_station = station
   end
 
@@ -36,7 +38,7 @@ class Oystercard
 
   private
 
-  attr_writer :balance, :current_station
+  attr_writer :balance, :current_station, :journey
 
   def deduct(fare)
     self.balance -= fare

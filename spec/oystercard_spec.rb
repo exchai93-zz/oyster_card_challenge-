@@ -60,7 +60,7 @@ describe Oystercard do
 
     it "raises an error if there are insufficient funds" do
       message = "Cannot pass. Insufficient funds!"
-      expect{ card.touch_in(station)  }.to raise_error message
+      expect{ card.touch_in(station) }.to raise_error message
     end
 
     context 'topped up and touched in' do
