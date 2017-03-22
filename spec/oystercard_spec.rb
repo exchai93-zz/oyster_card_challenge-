@@ -5,6 +5,7 @@ describe Oystercard do
   let(:station) {double :station}
   let(:entry_station) {double :station}
   let(:exit_station) {double :station}
+  let(:journey) {double :journey, complete: false}
   let (:journey) { {entry_station: entry_station, exit_station: exit_station} }
 
   describe '#balance' do
@@ -44,23 +45,16 @@ describe Oystercard do
     end
   end
 
-  describe "#in_journey?" do
-    it 'is initally not in a journey' do
-      expect(card.in_journey?).to be false
-    end
-
-    it 'is in journey' do
-      card.top_up(Oystercard::MINIMUM_BALANCE)
-      card.touch_in(station)
-      expect(card.in_journey?).to be true
-    end
-  end
-
   describe "#touch_in" do
 
     it "raises an error if there are insufficient funds" do
       message = "Cannot pass. Insufficient funds!"
       expect{ card.touch_in(station) }.to raise_error message
+    end
+
+    it 'deducts a penalty charge if previous journey not complete' do
+      card.top_up(Oystercard::MINIMUM_BALANCE + Oystercard::PENALTY_CHARGE)
+      expect{card.touch_in(station)}.to change{card.balance}.by(-6)
     end
 
     context 'topped up and touched in' do
@@ -69,13 +63,10 @@ describe Oystercard do
         card.touch_in(station)
       end
 
-      it "can touch in" do
-        expect(card).to be_in_journey
-      end
-
       it "stores the current station" do
         expect(card.current_station).to eq station
       end
+
     end
 
   end
@@ -85,11 +76,6 @@ describe Oystercard do
       before do
         card.top_up(Oystercard::MINIMUM_BALANCE)
         card.touch_in(station)
-      end
-
-      it "can touch out" do
-        card.touch_out(station)
-        expect(card).not_to be_in_journey
       end
 
       it "deducts fare once journey is completed" do

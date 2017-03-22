@@ -10,4 +10,11 @@ class Journey
     @complete = false
   end
 
+  def end_journey
+    self.complete = true
+  end
+
+private
+attr_writer :complete
+
 end

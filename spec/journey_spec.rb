@@ -15,4 +15,10 @@ subject {described_class.new(station)}
     end
   end
 
+  describe '#end_journey' do
+    it 'marks complete as true' do
+      subject.end_journey
+      expect(subject.complete).to be true
+    end
+  end
 end
