@@ -5,6 +5,7 @@ describe Oystercard do
   let(:station) {double :station}
   let(:entry_station) {double :station}
   let(:exit_station) {double :station}
+  let (:journey) { {entry_station: entry_station, exit_station: exit_station} }
 
   describe '#balance' do
     it { is_expected.to respond_to :balance }
@@ -104,7 +105,6 @@ describe Oystercard do
     it { is_expected.to respond_to(:touch_out).with(1).argument }
 
     it 'stores one journey after touching out' do
-      journey = {entry_station: entry_station, exit_station: exit_station}
       card.top_up(Oystercard::MINIMUM_BALANCE)
       card.touch_in(entry_station)
       card.touch_out(exit_station)
