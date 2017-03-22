@@ -20,10 +20,6 @@ class Oystercard
     self.balance += amount
   end
 
-  def in_journey?
-    current_station == nil ? false : true
-  end
-
   def touch_in(station)
     raise "Cannot pass. Insufficient funds!" if balance < MINIMUM_BALANCE
     @journey = Journey.new(station)
