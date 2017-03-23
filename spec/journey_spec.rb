@@ -1,7 +1,7 @@
 require 'journey'
 describe Journey do
 let(:station) {double :station}
-subject {described_class.new(station)}
+subject {described_class.new(entry_station: station)}
 
   describe '#entry_station' do
     it 'has an entry station' do
