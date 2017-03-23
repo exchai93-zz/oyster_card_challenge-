@@ -17,10 +17,6 @@ describe Journeylog do
         expect(journeylog.journeys).to include journey
       end
 
-      it 'adds journey to journeys' do
-        expect(journeylog.journeys).to include journey
-      end
-
     end
   end
 end
