@@ -6,6 +6,7 @@ describe Journeylog do
   let(:station) {double :station}
   let(:journey_class) {double :journey_class, new: journey}
   subject(:journeylog) {described_class.new(journey_class: journey_class)}
+
   describe '#start_journey(station)' do
     context 'Having started a journey' do
       before do
@@ -13,6 +14,10 @@ describe Journeylog do
       end
 
       it 'starts recording a journey' do
+        expect(journeylog.journeys).to include journey
+      end
+
+      it 'adds journey to journeys' do
         expect(journeylog.journeys).to include journey
       end
 
