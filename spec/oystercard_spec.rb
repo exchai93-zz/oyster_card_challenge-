@@ -19,14 +19,14 @@ describe Oystercard do
   describe "#top_up" do
 
     it "increases the balance by the amount topped up" do
-      card.top_up(Oystercard::MINIMUM_CHARGE)
-      expect { card.top_up(Oystercard::MINIMUM_CHARGE) }.to change { card.balance }.by(Oystercard::MINIMUM_CHARGE)
+      card.top_up(Oystercard::MINIMUM_BALANCE)
+      expect { card.top_up(Oystercard::MINIMUM_BALANCE) }.to change { card.balance }.by(Oystercard::MINIMUM_BALANCE)
     end
 
     it "raises an error if attempted top up exceeds £90 limit" do
       maximum_balance = Oystercard::MAXIMUM_BALANCE
       message = "Cannot top up: maximum balance exceeded (£90)"
-      expect { card.top_up(maximum_balance + Oystercard::MINIMUM_CHARGE) }.to raise_error message
+      expect { card.top_up(maximum_balance + Oystercard::MINIMUM_BALANCE) }.to raise_error message
     end
 
     it "raises an error when limit of £90 is exceeded" do
@@ -40,8 +40,9 @@ describe Oystercard do
   describe "#deduct" do
 
     it "deducts fare from balance" do
-      card.top_up(Oystercard::MINIMUM_CHARGE)
-      expect{card.touch_out(station)}.to change{card.balance}.by(-Oystercard::MINIMUM_CHARGE)
+      card.top_up(Oystercard::MINIMUM_BALANCE)
+      card.touch_in(entry_station: station)
+      expect{card.touch_out(exit_station: station)}.to change{card.balance}.by(-Oystercard::MINIMUM_BALANCE)
     end
   end
 
@@ -53,18 +54,14 @@ describe Oystercard do
     end
 
     it 'deducts a penalty charge if previous journey not complete' do
-      card.top_up(Oystercard::MINIMUM_BALANCE + Oystercard::PENALTY_CHARGE)
-      expect{card.touch_in(station)}.to change{card.balance}.by(-6)
+      card.top_up(Oystercard::MINIMUM_BALANCE + 6)
+      expect{card.touch_in(entry_station: station)}.to change{card.balance}.by(-6)
     end
 
     context 'topped up and touched in' do
       before do
         card.top_up(Oystercard::MINIMUM_BALANCE)
-        card.touch_in(station)
-      end
-
-      it "stores the current station" do
-        expect(card.current_station).to eq station
+        card.touch_in(entry_station: station)
       end
 
     end
@@ -75,16 +72,11 @@ describe Oystercard do
     context 'tops up and touches in' do
       before do
         card.top_up(Oystercard::MINIMUM_BALANCE)
-        card.touch_in(station)
+        card.touch_in(entry_station: station)
       end
 
       it "deducts fare once journey is completed" do
-        expect {card.touch_out(station)}.to change{card.balance}.by(-Oystercard::MINIMUM_CHARGE)
-      end
-
-      it 'forgets the current station once touched out' do
-        card.touch_out(station)
-        expect(card.current_station).to eq nil
+        expect {card.touch_out(exit_station: station)}.to change{card.balance}.by(-Oystercard::MINIMUM_BALANCE)
       end
     end
 
@@ -92,15 +84,10 @@ describe Oystercard do
 
     it 'stores one journey after touching out' do
       card.top_up(Oystercard::MINIMUM_BALANCE)
-      card.touch_in(entry_station)
-      card.touch_out(exit_station)
-      expect(card.journeys).to include journey
+      card.touch_in(entry_station: station)
+      card.touch_out(exit_station: station)
+      expect(card.journeys).to include card.journey
     end
-  end
-
-
-  describe '#current_station' do
-      it {is_expected.to respond_to(:current_station)}
   end
 
   describe '#journeys' do

@@ -9,11 +9,11 @@ class Journey
     @complete = false
   end
 
-  def end_journey(exit_station = nil)
+  def end_journey(exit_station: nil)
     @exit_station = exit_station
     self.complete = true
     # returns the object journey
-    # card.exit - returns the journey 
+    # card.exit - returns the journey
     self
   end
 

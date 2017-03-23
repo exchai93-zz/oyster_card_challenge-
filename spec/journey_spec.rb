@@ -29,8 +29,14 @@ subject {described_class.new(entry_station: station)}
     end
   end
 
+  context 'Given an exit station' do
+    before do
+      subject.end_journey(exit_station: station)
+    end
+
     it 'charges a standard fare' do
-      subject.end_journey
+      puts subject
       expect(subject.fare). to eq Journey::MIN_FARE
     end
+  end
 end
