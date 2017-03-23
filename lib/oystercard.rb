@@ -1,6 +1,7 @@
 require_relative 'station'
 require_relative 'journey'
 class Oystercard
+  # Anything relating to blance
 
   attr_reader :balance, :journeys, :journey
 

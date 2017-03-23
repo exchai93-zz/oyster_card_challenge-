@@ -1,4 +1,5 @@
 class Journey
+  # Remembering one instance of journey
 
   PENALTY_CHARGE = 6
   MIN_FARE = 1
