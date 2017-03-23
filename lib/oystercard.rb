@@ -6,13 +6,12 @@ class Oystercard
 
   MAXIMUM_BALANCE = 90
   MINIMUM_BALANCE = 1
-  MINIMUM_CHARGE  = 1
-  PENALTY_CHARGE = 6
 
   def initialize
     @balance = 0
     @current_station = nil
     @journeys = []
+    @journey = Journey.new
   end
 
   def top_up(amount)
@@ -22,17 +21,18 @@ class Oystercard
 
   def touch_in(station)
     raise "Cannot pass. Insufficient funds!" if balance < MINIMUM_BALANCE
+      if journey.exit_station != nil
+        deduct(journey.fare)
+        puts "You have been charged"
+      end
     @journey = Journey.new(station)
-    if journey.complete == false
-      deduct(PENALTY_CHARGE)
-      puts "You have been charged"
-    end
     self.current_station = station
   end
 
   def touch_out(station)
-    deduct(MINIMUM_CHARGE)
-    journeys.push({entry_station: current_station, exit_station: station})
+    journey.end_journey(station)
+    deduct(journey.fare)
+    journeys << journey
     self.current_station = nil
   end
 

@@ -21,4 +21,16 @@ subject {described_class.new(station)}
       expect(subject.complete).to be true
     end
   end
+
+  describe '#fare' do
+    it 'charges a penalty charge' do
+      subject.end_journey
+      expect(subject.fare).to eq Journey::PENALTY_CHARGE
+    end
+  end
+
+    it 'charges a standard fare' do
+      subject.end_journey
+      expect(subject.fare). to eq Journey::MIN_FARE
+    end
 end
