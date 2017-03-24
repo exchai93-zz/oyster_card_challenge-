@@ -25,15 +25,4 @@ describe Journeylog do
     end
   end
 
-  describe '#exit_journey' do
-    context 'having exited a journey' do
-
-      it {is_expected.to respond_to :exit_journey}
-
-      # it '' do
-      #
-      # end
-
-    end
-  end
 end
