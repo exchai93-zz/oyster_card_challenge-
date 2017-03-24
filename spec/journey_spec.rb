@@ -3,6 +3,8 @@ describe Journey do
 let(:station) {double :station}
 subject {described_class.new(entry_station: station)}
 
+let(:exit_station) {double :exit_station}
+
   describe '#entry_station' do
     it 'has an entry station' do
       expect(subject.entry_station).to eq station
@@ -25,7 +27,7 @@ subject {described_class.new(entry_station: station)}
   describe '#fare' do
     it 'charges a penalty charge' do
       subject.end_journey
-      expect(subject.fare).to eq Journey::PENALTY_CHARGE
+      expect(subject.penalty_fare).to eq Journey::PENALTY_CHARGE
     end
   end
 
@@ -39,4 +41,14 @@ subject {described_class.new(entry_station: station)}
       expect(subject.standard_fare). to eq Journey::MIN_FARE
     end
   end
+
+  describe '#fare_calculator' do
+    it {is_expected.to respond_to :fare_calculator}
+  end
+
+  it 'calculates the fare from zone 1 to zone 1' do
+    subject.end_journey(exit_station: exit_station)
+    expect(subject.fare_calculator).to eq 1
+  end
+
 end

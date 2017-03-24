@@ -26,12 +26,15 @@ class Journey
     (entry_station == nil || exit_station != nil)
   end
 
-  def fare
+  def penalty_fare
     return PENALTY_CHARGE if touch_in_penalty || touch_out_penalty
   end
 
   def standard_fare
     MIN_FARE
+  end
+
+  def fare_calculator
   end
 
 private

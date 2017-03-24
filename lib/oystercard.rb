@@ -22,7 +22,7 @@ class Oystercard
   def touch_in(station)
     raise "Cannot pass. Insufficient funds!" if balance < MINIMUM_BALANCE
       if journey.exit_station == nil && journey.entry_station != nil
-        deduct(journey.fare)
+        deduct(journey.penalty_fare)
         puts "You have been charged"
       end
     @journey = Journey.new(entry_station: station)
@@ -30,7 +30,7 @@ class Oystercard
 
   def touch_out(station)
     if journey.entry_station == nil || journey.exit_station != nil
-      deduct(journey.fare)
+      deduct(journey.penalty_fare)
       puts "PENALTY CHARGE!!!"
     else
     journey.end_journey(exit_station: station)
@@ -44,8 +44,8 @@ class Oystercard
 
   attr_writer :balance, :journey
 
-  def deduct(fare)
-    self.balance -= fare
+  def deduct(penalty_fare)
+    self.balance -= penalty_fare
   end
 
 end

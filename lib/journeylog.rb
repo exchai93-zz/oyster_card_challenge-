@@ -17,6 +17,10 @@ class Journeylog
     add(journey_class.new(entry_station: station))
   end
 
+  def journeys
+    @journeys.dup
+  end
+
   private
 
   attr_reader :journey_class
