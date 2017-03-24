@@ -55,6 +55,7 @@ describe Oystercard do
 
     it 'deducts a penalty charge if previous journey not complete' do
       card.top_up(Oystercard::MINIMUM_BALANCE + 6)
+      card.touch_in(entry_station: station)
       expect{card.touch_in(entry_station: station)}.to change{card.balance}.by(-6)
     end
 
@@ -87,6 +88,10 @@ describe Oystercard do
       card.touch_in(entry_station: station)
       card.touch_out(exit_station: station)
       expect(card.journeys).to include card.journey
+    end
+
+    it 'charges penalty fare on touch_out when no touch_in' do
+      expect{card.touch_out(exit_station: station)}.to change{card.balance}.by(-6)
     end
   end
 

@@ -18,12 +18,19 @@ class Journey
     self
   end
 
-  def penalty?
+  def touch_in_penalty
     (!entry_station || !exit_station)
   end
 
+  def touch_out_penalty
+    (entry_station == nil || exit_station != nil)
+  end
+
   def fare
-    return PENALTY_CHARGE if penalty?
+    return PENALTY_CHARGE if touch_in_penalty || touch_out_penalty
+  end
+
+  def standard_fare
     MIN_FARE
   end
 

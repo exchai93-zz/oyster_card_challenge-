@@ -36,7 +36,7 @@ subject {described_class.new(entry_station: station)}
 
     it 'charges a standard fare' do
       puts subject
-      expect(subject.fare). to eq Journey::MIN_FARE
+      expect(subject.standard_fare). to eq Journey::MIN_FARE
     end
   end
 end

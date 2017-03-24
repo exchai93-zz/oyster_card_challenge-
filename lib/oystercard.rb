@@ -21,17 +21,22 @@ class Oystercard
 
   def touch_in(station)
     raise "Cannot pass. Insufficient funds!" if balance < MINIMUM_BALANCE
-      if journey.exit_station == nil
+      if journey.exit_station == nil && journey.entry_station != nil
         deduct(journey.fare)
         puts "You have been charged"
       end
-    @journey = Journey.new(station)
+    @journey = Journey.new(entry_station: station)
   end
 
   def touch_out(station)
-    journey.end_journey(station)
-    deduct(journey.fare)
+    if journey.entry_station == nil || journey.exit_station != nil
+      deduct(journey.fare)
+      puts "PENALTY CHARGE!!!"
+    else
+    journey.end_journey(exit_station: station)
+    deduct(journey.standard_fare)
     journeys << journey
+  end
   end
 
 
